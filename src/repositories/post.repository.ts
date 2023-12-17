@@ -27,7 +27,7 @@ export class PostRepository {
         const postIndex = db.posts.findIndex(i => i.id === id)
         const post = db.posts.find(p => p.id === id)
         if (!post) {
-            return;
+            return 404;
         }
         const updatedPost = {
             ...post,

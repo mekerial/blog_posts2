@@ -30,7 +30,11 @@ postRoute.put('/:id', authMiddleware, postValidation(), (req: RequestWithBodyAnd
     const id = req.params.id
     let {title, shortDescription, content, blogId, blogName} = req.body
     const updatedPost = PostRepository.updatePost(id, title, shortDescription, content, blogId, blogName)
-    res.sendStatus(204)
+    if (updatedPost) {
+        res.sendStatus(404)
+    } else {
+        res.sendStatus(204)
+    }
 })
 
 postRoute.delete('/:id', authMiddleware, (req: RequestWithParams<string>, res: Response) => {

@@ -27,15 +27,20 @@ exports.postRoute.put('/:id', auth_middleware_1.authMiddleware, (0, post_validat
     const id = req.params.id;
     let { title, shortDescription, content, blogId, blogName } = req.body;
     const updatedPost = post_repository_1.PostRepository.updatePost(id, title, shortDescription, content, blogId, blogName);
-    res.sendStatus(204);
+    if (updatedPost) {
+        res.sendStatus(404);
+    }
+    else {
+        res.sendStatus(204);
+    }
 });
 exports.postRoute.delete('/:id', auth_middleware_1.authMiddleware, (req, res) => {
     const id = req.params.id;
     const deletedPost = post_repository_1.PostRepository.deletePostById(id);
-    if (deletedPost) {
-        res.sendStatus(204);
+    if (!deletedPost) {
+        res.sendStatus(404);
     }
     else {
-        res.sendStatus(404);
+        res.sendStatus(204);
     }
 });
