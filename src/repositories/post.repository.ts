@@ -48,7 +48,7 @@ export class PostRepository {
             for (let i = 0; i < db.posts.length; i++) {
                 if (db.posts[i].id === id) {
                     db.posts.splice(i, 1)
-                    return true
+                    return 204
                 }
             }
         }

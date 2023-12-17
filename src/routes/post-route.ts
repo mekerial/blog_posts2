@@ -36,10 +36,10 @@ postRoute.put('/:id', authMiddleware, postValidation(), (req: RequestWithBodyAnd
 postRoute.delete('/:id', authMiddleware, (req: RequestWithParams<string>, res: Response) => {
     const id = req.params.id
     const deletedPost = PostRepository.deletePostById(id)
-    if (deletedPost) {
-        res.sendStatus(204)
-    } else {
+    if (!deletedPost) {
         res.sendStatus(404)
+    } else {
+        res.sendStatus(204)
     }
 
 })
