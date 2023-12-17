@@ -41,4 +41,5 @@ postRoute.delete('/:id', authMiddleware, (req: RequestWithParams<string>, res: R
     } else {
         res.send(404)
     }
+
 })
