@@ -17,7 +17,7 @@ class PostRepository {
             shortDescription,
             content,
             blogId,
-            blogName: blogName ? blogName : 'undefined'
+            blogName: blogName ? blogName : ''
         };
         db_1.db.posts.push(post);
         return post;
@@ -31,8 +31,7 @@ class PostRepository {
         const updatedPost = Object.assign(Object.assign({}, post), { title,
             shortDescription,
             content,
-            blogId,
-            blogName });
+            blogId, blogName: blogName ? blogName : '' });
         db_1.db.posts.splice(postIndex, 1, updatedPost);
         return;
     }

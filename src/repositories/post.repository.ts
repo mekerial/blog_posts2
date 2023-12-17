@@ -18,7 +18,7 @@ export class PostRepository {
             shortDescription,
             content,
             blogId,
-            blogName: blogName ? blogName : 'undefined'
+            blogName: blogName ? blogName : ''
         }
         db.posts.push(post)
         return post
@@ -35,7 +35,7 @@ export class PostRepository {
             shortDescription,
             content,
             blogId,
-            blogName
+            blogName: blogName ? blogName : ''
         }
         db.posts.splice(postIndex, 1, updatedPost)
         return;
