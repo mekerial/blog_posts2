@@ -18,7 +18,7 @@ export class PostRepository {
             shortDescription,
             content,
             blogId,
-            blogName: blogName? blogName : ""
+            blogName: blogName? blogName : blogName
         }
         db.posts.push(post)
         return post
