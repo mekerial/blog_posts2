@@ -10,7 +10,7 @@ exports.postRoute.get('/', (req, res) => {
     const posts = post_repository_1.PostRepository.getAllPosts();
     res.send(posts);
 });
-exports.postRoute.get('/:id', auth_middleware_1.authMiddleware, (req, res) => {
+exports.postRoute.get('/:id', (req, res) => {
     const id = req.params.id;
     const post = post_repository_1.PostRepository.getPostById(id);
     if (!post) {
