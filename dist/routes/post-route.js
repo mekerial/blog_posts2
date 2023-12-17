@@ -33,9 +33,9 @@ exports.postRoute.delete('/:id', auth_middleware_1.authMiddleware, (req, res) =>
     const id = req.params.id;
     const deletedPost = post_repository_1.PostRepository.deletePostById(id);
     if (deletedPost) {
-        res.send(204);
+        res.status(204);
     }
     else {
-        res.send(404);
+        res.status(404);
     }
 });
