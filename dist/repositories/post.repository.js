@@ -17,7 +17,7 @@ class PostRepository {
             shortDescription,
             content,
             blogId,
-            blogName
+            blogName: blogName ? blogName : ""
         };
         db_1.db.posts.push(post);
         return post;
