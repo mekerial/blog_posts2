@@ -10,7 +10,7 @@ export const postRoute = Router({})
 
 postRoute.get('/', (req: Request, res: Response) => {
     const posts = PostRepository.getAllPosts()
-    res.send(posts)
+    res.status(200).send(posts)
 })
 postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
     const id = req.params.id
@@ -18,7 +18,7 @@ postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
     if (!post) {
         res.sendStatus(404)
     }
-    res.status(201).send(post)
+    res.status(200).send(post)
 })
 postRoute.post('/', authMiddleware, postValidation(), (req: RequestWithBody<CreatePostModel>, res: Response) => {
     let {title, shortDescription, content, blogId, blogName} = req.body
