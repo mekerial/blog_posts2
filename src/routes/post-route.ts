@@ -18,7 +18,7 @@ postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
     if (!post) {
         res.sendStatus(404)
     }
-    res.send(post)
+    res.status(201).send(post)
 })
 postRoute.post('/', authMiddleware, postValidation(), (req: RequestWithBody<CreatePostModel>, res: Response) => {
     let {title, shortDescription, content, blogId, blogName} = req.body
