@@ -12,7 +12,7 @@ postRoute.get('/', (req: Request, res: Response) => {
     const posts = PostRepository.getAllPosts()
     res.send(posts)
 })
-postRoute.get('/:id', authMiddleware, (req: RequestWithParams<Params>, res: Response) => {
+postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
     const id = req.params.id
     const post = PostRepository.getPostById(id)
     if (!post) {

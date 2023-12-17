@@ -20,6 +20,7 @@ class PostRepository {
             blogName
         };
         db_1.db.posts.push(post);
+        return post;
     }
     static updatePost(id, title, shortDescription, content, blogId, blogName) {
         const postIndex = db_1.db.posts.findIndex(i => i.id === id);

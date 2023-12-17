@@ -27,7 +27,12 @@ exports.blogRoute.put('/:id', auth_middleware_1.authMiddleware, (0, blog_validat
     const id = req.params.id;
     let { name, description, websiteUrl } = req.body;
     const updatedBlog = blog_repository_1.BlogRepository.updateBlog(id, name, description, websiteUrl);
-    res.sendStatus(204);
+    if (updatedBlog) {
+        res.sendStatus(204);
+    }
+    else {
+        res.sendStatus(404);
+    }
 });
 exports.blogRoute.delete('/:id', auth_middleware_1.authMiddleware, (req, res) => {
     const id = req.params.id;

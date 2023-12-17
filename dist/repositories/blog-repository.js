@@ -30,7 +30,7 @@ class BlogRepository {
             description,
             websiteUrl });
         db_1.db.blogs.splice(blogIndex, 1, updatedBlog);
-        return;
+        return true;
     }
     static deleteBlogById(id) {
         const blog = db_1.db.blogs.find(b => b.id === id);
