@@ -33,7 +33,11 @@ blogRoute.put('/:id', authMiddleware, blogValidation(), (req: RequestWithBodyAnd
     const id = req.params.id
     let {name, description, websiteUrl} = req.body
     const updatedBlog = BlogRepository.updateBlog(id, name, description, websiteUrl)
-    res.sendStatus(204)
+    if (updatedBlog) {
+        res.sendStatus(204)
+    } else {
+        res.sendStatus(404)
+    }
 })
 
 blogRoute.delete('/:id', authMiddleware, (req: RequestWithParams<string>, res: Response) => {

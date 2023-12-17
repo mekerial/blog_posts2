@@ -21,6 +21,7 @@ export class PostRepository {
             blogName
         }
         db.posts.push(post)
+        return post
     }
     static updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string, blogName: string) {
         const postIndex = db.posts.findIndex(i => i.id === id)
