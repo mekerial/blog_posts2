@@ -18,13 +18,13 @@ class BlogRepository {
             websiteUrl
         };
         db_1.db.blogs.push(blog);
-        return (blog);
+        return blog;
     }
     static updateBlog(id, name, description, websiteUrl) {
         const blogIndex = db_1.db.blogs.findIndex(i => i.id === id);
         const blog = db_1.db.blogs.find(b => b.id === id);
         if (!blog) {
-            return;
+            return false;
         }
         const updatedBlog = Object.assign(Object.assign({}, blog), { name,
             description,
@@ -35,17 +35,17 @@ class BlogRepository {
     static deleteBlogById(id) {
         const blog = db_1.db.blogs.find(b => b.id === id);
         if (!blog) {
-            return;
+            return false;
         }
         else {
             for (let i = 0; i < db_1.db.blogs.length; i++) {
                 if (db_1.db.blogs[i].id === id) {
                     db_1.db.blogs.splice(i, 1);
-                    return 204;
+                    return true;
                 }
             }
         }
-        return;
+        return false;
     }
 }
 exports.BlogRepository = BlogRepository;

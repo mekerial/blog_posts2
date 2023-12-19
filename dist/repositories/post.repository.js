@@ -9,15 +9,16 @@ class PostRepository {
     static getPostById(id) {
         return db_1.db.posts.find(p => p.id === id);
     }
-    static createPost(title, shortDescription, content, blogId, blogName) {
+    static createPost(title, shortDescription, content, blogId) {
         const id = (+(new Date())).toString();
+        const blog = db_1.db.blogs.find(b => b.id === blogId);
         const post = {
             id,
             title,
             shortDescription,
             content,
             blogId,
-            blogName: blogName ? blogName : ''
+            blogName: blog.name
         };
         db_1.db.posts.push(post);
         return post;
@@ -26,29 +27,29 @@ class PostRepository {
         const postIndex = db_1.db.posts.findIndex(i => i.id === id);
         const post = db_1.db.posts.find(p => p.id === id);
         if (!post) {
-            return;
+            return null;
         }
         const updatedPost = Object.assign(Object.assign({}, post), { title,
             shortDescription,
             content,
             blogId, blogName: blogName ? blogName : '' });
         db_1.db.posts.splice(postIndex, 1, updatedPost);
-        return;
+        return updatedPost;
     }
     static deletePostById(id) {
         const post = db_1.db.posts.find(p => p.id === id);
         if (!post) {
-            return;
+            return false;
         }
         else {
             for (let i = 0; i < db_1.db.posts.length; i++) {
                 if (db_1.db.posts[i].id === id) {
                     db_1.db.posts.splice(i, 1);
-                    return 204;
+                    return true;
                 }
             }
         }
-        return;
+        return false;
     }
 }
 exports.PostRepository = PostRepository;

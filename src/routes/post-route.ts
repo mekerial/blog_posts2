@@ -21,16 +21,18 @@ postRoute.get('/:id', (req: RequestWithParams<Params>, res: Response) => {
     res.status(200).send(post)
 })
 postRoute.post('/', authMiddleware, postValidation(), (req: RequestWithBody<CreatePostModel>, res: Response) => {
-    let {title, shortDescription, content, blogId, blogName} = req.body
-    const post = PostRepository.createPost(title, shortDescription, content, blogId, blogName)
+    let {title, shortDescription, content, blogId} = req.body
+    const post = PostRepository.createPost(title, shortDescription, content, blogId)
     res.status(201).send(post)
 })
 
 postRoute.put('/:id', authMiddleware, postValidation(), (req: RequestWithBodyAndParams<Params, any>, res: Response) => {
     const id = req.params.id
     let {title, shortDescription, content, blogId, blogName} = req.body
+
     const updatedPost = PostRepository.updatePost(id, title, shortDescription, content, blogId, blogName)
-    if (updatedPost) {
+
+    if (!updatedPost) {
         res.sendStatus(404)
     } else {
         res.sendStatus(204)
@@ -39,7 +41,9 @@ postRoute.put('/:id', authMiddleware, postValidation(), (req: RequestWithBodyAnd
 
 postRoute.delete('/:id', authMiddleware, (req: RequestWithParams<string>, res: Response) => {
     const id = req.params.id
+
     const deletedPost = PostRepository.deletePostById(id)
+
     if (!deletedPost) {
         res.sendStatus(404)
     } else {

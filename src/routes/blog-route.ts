@@ -32,7 +32,9 @@ blogRoute.post('/', authMiddleware, blogValidation(), (req: RequestWithBody<Crea
 blogRoute.put('/:id', authMiddleware, blogValidation(), (req: RequestWithBodyAndParams<Params, any>, res: Response) => {
     const id = req.params.id
     let {name, description, websiteUrl} = req.body
+
     const updatedBlog = BlogRepository.updateBlog(id, name, description, websiteUrl)
+
     if (updatedBlog) {
         res.sendStatus(204)
     } else {
@@ -43,9 +45,10 @@ blogRoute.put('/:id', authMiddleware, blogValidation(), (req: RequestWithBodyAnd
 blogRoute.delete('/:id', authMiddleware, (req: RequestWithParams<string>, res: Response) => {
     const id = req.params.id
     const deletedBlog = BlogRepository.deleteBlogById(id)
+
     if (deletedBlog) {
-        res.send(204)
+        res.sendStatus(204)
     } else {
-        res.send(404)
+        res.sendStatus(404)
     }
 })

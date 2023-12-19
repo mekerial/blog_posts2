@@ -38,9 +38,9 @@ exports.blogRoute.delete('/:id', auth_middleware_1.authMiddleware, (req, res) =>
     const id = req.params.id;
     const deletedBlog = blog_repository_1.BlogRepository.deleteBlogById(id);
     if (deletedBlog) {
-        res.send(204);
+        res.sendStatus(204);
     }
     else {
-        res.send(404);
+        res.sendStatus(404);
     }
 });

@@ -10,16 +10,19 @@ export class PostRepository {
         return db.posts.find(p => p.id === id)
     }
 
-    static createPost(title: string, shortDescription: string, content: string, blogId: string, blogName: string) {
+    static createPost(title: string, shortDescription: string, content: string, blogId: string) {
         const id = (+(new Date())).toString()
+        const blog = db.blogs.find(b => b.id === blogId)
+
         const post = {
             id,
             title,
             shortDescription,
             content,
             blogId,
-            blogName: blogName ? blogName : ''
+            blogName: blog!.name
         }
+
         db.posts.push(post)
         return post
     }
@@ -27,7 +30,7 @@ export class PostRepository {
         const postIndex = db.posts.findIndex(i => i.id === id)
         const post = db.posts.find(p => p.id === id)
         if (!post) {
-            return 404;
+            return null;
         }
         const updatedPost = {
             ...post,
@@ -38,20 +41,22 @@ export class PostRepository {
             blogName: blogName ? blogName : ''
         }
         db.posts.splice(postIndex, 1, updatedPost)
-        return;
+
+        return updatedPost;
     }
     static deletePostById(id: string) {
         const post = db.posts.find(p => p.id === id)
+
         if (!post) {
-            return;
+            return false;
         } else {
             for (let i = 0; i < db.posts.length; i++) {
                 if (db.posts[i].id === id) {
                     db.posts.splice(i, 1)
-                    return 204
+                    return true
                 }
             }
         }
-        return
+        return false
     }
 }

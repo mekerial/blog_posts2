@@ -19,15 +19,15 @@ exports.postRoute.get('/:id', (req, res) => {
     res.status(200).send(post);
 });
 exports.postRoute.post('/', auth_middleware_1.authMiddleware, (0, post_validator_1.postValidation)(), (req, res) => {
-    let { title, shortDescription, content, blogId, blogName } = req.body;
-    const post = post_repository_1.PostRepository.createPost(title, shortDescription, content, blogId, blogName);
+    let { title, shortDescription, content, blogId } = req.body;
+    const post = post_repository_1.PostRepository.createPost(title, shortDescription, content, blogId);
     res.status(201).send(post);
 });
 exports.postRoute.put('/:id', auth_middleware_1.authMiddleware, (0, post_validator_1.postValidation)(), (req, res) => {
     const id = req.params.id;
     let { title, shortDescription, content, blogId, blogName } = req.body;
     const updatedPost = post_repository_1.PostRepository.updatePost(id, title, shortDescription, content, blogId, blogName);
-    if (updatedPost) {
+    if (!updatedPost) {
         res.sendStatus(404);
     }
     else {
