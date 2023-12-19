@@ -29,6 +29,8 @@ export class PostRepository {
     static updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string, blogName: string) {
         const postIndex = db.posts.findIndex(i => i.id === id)
         const post = db.posts.find(p => p.id === id)
+        const blog = db.blogs.find(b => b.id === blogId)
+
         if (!post) {
             return null;
         }
@@ -38,7 +40,7 @@ export class PostRepository {
             shortDescription,
             content,
             blogId,
-            blogName: blogName ? blogName : ''
+            blogName: blog!.name
         }
         db.posts.splice(postIndex, 1, updatedPost)
 
