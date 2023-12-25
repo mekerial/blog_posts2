@@ -1,5 +1,5 @@
 import {blogCollection, db, postCollection} from "../db/db";
-import {postMapper} from "../models/posts/mapper";
+import {postMapper} from "../models/posts/mappers/mapper";
 import {ObjectId} from "mongodb";
 import {OutputPostModel} from "../models/posts/output";
 import {CreatePostModel, UpdatePostModel} from "../models/posts/input";
@@ -21,13 +21,20 @@ export class PostRepository {
 
     static async createPost(createdData: CreatePostModel): Promise<OutputPostModel | undefined>  {
         const blog = await blogCollection.findOne({_id: new ObjectId(createdData.blogId)})
-        const post = await postCollection.insertOne({...createdData, blogName: blog!.name})
 
-        post.insertedId
+        const post = {
+            ...createdData,
+            blogName: blog!.name,
+            createdAt: new Date().toISOString()
+        }
+
+        const newPost = await postCollection.insertOne(post)
+
+        newPost.insertedId
 
         return {
-            ...{...createdData, blogName: blog!.name},
-            id: post.insertedId.toString()
+            ...{...post},
+            id: newPost.insertedId.toString()
         }
     }
     static async updatePost(id: string, updatedData: UpdatePostModel): Promise<boolean> {

@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostRepository = void 0;
 const db_1 = require("../db/db");
-const mapper_1 = require("../models/posts/mapper");
+const mapper_1 = require("../models/posts/mappers/mapper");
 const mongodb_1 = require("mongodb");
 class PostRepository {
     static getAllPosts() {
@@ -32,9 +32,10 @@ class PostRepository {
     static createPost(createdData) {
         return __awaiter(this, void 0, void 0, function* () {
             const blog = yield db_1.blogCollection.findOne({ _id: new mongodb_1.ObjectId(createdData.blogId) });
-            const post = yield db_1.postCollection.insertOne(Object.assign(Object.assign({}, createdData), { blogName: blog.name }));
-            post.insertedId;
-            return Object.assign(Object.assign({}, Object.assign(Object.assign({}, createdData), { blogName: blog.name })), { id: post.insertedId.toString() });
+            const post = Object.assign(Object.assign({}, createdData), { blogName: blog.name, createdAt: new Date().toISOString() });
+            const newPost = yield db_1.postCollection.insertOne(post);
+            newPost.insertedId;
+            return Object.assign(Object.assign({}, Object.assign({}, post)), { id: newPost.insertedId.toString() });
         });
     }
     static updatePost(id, updatedData) {

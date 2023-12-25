@@ -3,7 +3,6 @@ import {OutputBlogModel} from "../models/blogs/output";
 import {blogMapper} from "../models/blogs/mappers/mapper";
 import {ObjectId} from "mongodb";
 import {CreateBlogModel, UpdateBlogModel} from "../models/blogs/input";
-import {describe} from "node:test";
 
 
 export class BlogRepository {
@@ -21,13 +20,17 @@ export class BlogRepository {
     }
 
     static async createBlog(createdData: CreateBlogModel): Promise<OutputBlogModel> {
-        const blog = await blogCollection.insertOne(createdData)
+        const blog = {
+            ...createdData,
+            createdAt: new Date().toISOString()
+        }
+        const newBlog = await blogCollection.insertOne(blog)
 
-        blog.insertedId
+        newBlog.insertedId
 
         return {
-            ...createdData,
-            id: blog.insertedId.toString()
+            ...blog,
+            id: newBlog.insertedId.toString()
         }
     }
 

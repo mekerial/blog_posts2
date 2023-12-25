@@ -10,6 +10,7 @@ export type BlogDBType = {
     name: string,
     description: string,
     websiteUrl: string
+    createdAt: string
 }
 
 export type PostDBType = {
@@ -17,5 +18,6 @@ export type PostDBType = {
     shortDescription: string,
     content: string,
     blogId: string,
-    blogName: string
+    blogName: string,
+    createdAt: string
 }
