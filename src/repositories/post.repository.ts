@@ -1,64 +1,50 @@
-import {db} from "../db/db";
+import {blogCollection, db, postCollection} from "../db/db";
+import {postMapper} from "../models/posts/mapper";
+import {ObjectId} from "mongodb";
+import {OutputPostModel} from "../models/posts/output";
+import {CreatePostModel, UpdatePostModel} from "../models/posts/input";
 
 
 export class PostRepository {
-    static getAllPosts() {
-        return db.posts
+    static async getAllPosts() {
+        const posts = await postCollection.find({}).toArray()
+        return posts.map(postMapper)
     }
 
-    static getPostById(id: string) {
-        return db.posts.find(p => p.id === id)
-    }
-
-    static createPost(title: string, shortDescription: string, content: string, blogId: string) {
-        const id = (+(new Date())).toString()
-        const blog = db.blogs.find(b => b.id === blogId)
-
-        const post = {
-            id,
-            title,
-            shortDescription,
-            content,
-            blogId,
-            blogName: blog!.name
-        }
-
-        db.posts.push(post)
-        return post
-    }
-    static updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string, blogName: string) {
-        const postIndex = db.posts.findIndex(i => i.id === id)
-        const post = db.posts.find(p => p.id === id)
-        const blog = db.blogs.find(b => b.id === blogId)
-
+    static async getPostById(id: string) {
+        const post = await postCollection.findOne({_id: new ObjectId(id)})
         if (!post) {
-            return null;
+            return null
         }
-        const updatedPost = {
-            ...post,
-            title,
-            shortDescription,
-            content,
-            blogId,
-            blogName: blog!.name
-        }
-        db.posts.splice(postIndex, 1, updatedPost)
-
-        return updatedPost;
+        return postMapper(post)
     }
-    static deletePostById(id: string) {
-        const post = db.posts.find(p => p.id === id)
 
-        if (!post) {
-            return false;
-        } else {
-            for (let i = 0; i < db.posts.length; i++) {
-                if (db.posts[i].id === id) {
-                    db.posts.splice(i, 1)
-                    return true
-                }
+    static async createPost(createdData: CreatePostModel): Promise<OutputPostModel | undefined>  {
+        const blog = await blogCollection.findOne({_id: new ObjectId(createdData.blogId)})
+        const post = await postCollection.insertOne({...createdData, blogName: blog!.name})
+
+        post.insertedId
+
+        return {
+            ...{...createdData, blogName: blog!.name},
+            id: post.insertedId.toString()
+        }
+    }
+    static async updatePost(id: string, updatedData: UpdatePostModel): Promise<boolean> {
+        const post = await postCollection.updateOne({_id: new ObjectId(id)}, {
+            $set: {
+                title: updatedData.title,
+                shortDescription: updatedData.shortDescription,
+                content: updatedData.content,
+                blogId: updatedData.blogId,
             }
-        }
-        return false
+        })
+
+        return !!post.matchedCount;
+    }
+    static async deletePostById(id: string): Promise<boolean | null> {
+        const post = await postCollection.deleteOne({_id: new ObjectId(id)})
+
+        return !!post.deletedCount;
     }
 }

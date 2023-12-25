@@ -1,4 +1,4 @@
-import {BlogModel} from "../../src/models/blogs/output";
+import {OutputBlogModel} from "../../src/models/blogs/output";
 
 export const dataTestBlogCreate01= {
     name: 'create name',
