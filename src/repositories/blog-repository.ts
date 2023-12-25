@@ -22,7 +22,8 @@ export class BlogRepository {
     static async createBlog(createdData: CreateBlogModel): Promise<OutputBlogModel> {
         const blog = {
             ...createdData,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            isMembership: false
         }
         const newBlog = await blogCollection.insertOne(blog)
 
@@ -33,6 +34,7 @@ export class BlogRepository {
             description: blog.description,
             websiteUrl: blog.websiteUrl,
             createdAt: blog.createdAt,
+            isMembership: blog.isMembership,
             id: newBlog.insertedId.toString()
         }
     }

@@ -11,6 +11,7 @@ export type BlogDBType = {
     description: string,
     websiteUrl: string
     createdAt: string
+    isMembership: boolean
 }
 
 export type PostDBType = {

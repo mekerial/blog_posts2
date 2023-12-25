@@ -31,7 +31,7 @@ class BlogRepository {
     }
     static createBlog(createdData) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = Object.assign(Object.assign({}, createdData), { createdAt: new Date().toISOString() });
+            const blog = Object.assign(Object.assign({}, createdData), { createdAt: new Date().toISOString(), isMembership: false });
             const newBlog = yield db_1.blogCollection.insertOne(blog);
             newBlog.insertedId;
             return {
@@ -39,6 +39,7 @@ class BlogRepository {
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
                 createdAt: blog.createdAt,
+                isMembership: blog.isMembership,
                 id: newBlog.insertedId.toString()
             };
         });
