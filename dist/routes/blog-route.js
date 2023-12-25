@@ -29,6 +29,7 @@ exports.blogRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, fu
     const blog = yield blog_repository_1.BlogRepository.getBlogById(id);
     if (!blog) {
         res.sendStatus(404);
+        return;
     }
     res.send(blog);
 }));

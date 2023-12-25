@@ -26,6 +26,7 @@ blogRoute.get('/:id', async (req: RequestWithParams<Params>, res: Response) => {
 
     if(!blog) {
         res.sendStatus(404)
+        return;
     }
 
     res.send(blog)
