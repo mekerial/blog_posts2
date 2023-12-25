@@ -52,6 +52,7 @@ postRoute.post('/', authMiddleware, postValidation(), async (req: RequestWithBod
 postRoute.put('/:id', authMiddleware, postValidation(), async (req: RequestWithBodyAndParams<Params, any>, res: Response) => {
     const id = req.params.id
 
+
     if (!ObjectId.isValid(id)) {
         res.sendStatus(404)
         return;
