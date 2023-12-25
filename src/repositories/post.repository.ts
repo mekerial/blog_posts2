@@ -50,6 +50,7 @@ export class PostRepository {
         return !!post.matchedCount;
     }
     static async deletePostById(id: string): Promise<boolean | null> {
+
         const post = await postCollection.deleteOne({_id: new ObjectId(id)})
 
         return !!post.deletedCount;
