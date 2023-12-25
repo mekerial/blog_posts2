@@ -34,6 +34,7 @@ postRoute.post('/', authMiddleware, postValidation(), async (req: RequestWithBod
     const content = req.body.content
     const blogId = req.body.blogId
 
+
     const blog = await BlogRepository.getBlogById(blogId)
 
     const newPost: CreatePostModel = {
