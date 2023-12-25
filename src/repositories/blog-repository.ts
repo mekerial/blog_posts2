@@ -29,7 +29,10 @@ export class BlogRepository {
         newBlog.insertedId
 
         return {
-            ...blog,
+            name: blog.name,
+            description: blog.description,
+            websiteUrl: blog.websiteUrl,
+            createdAt: blog.createdAt,
             id: newBlog.insertedId.toString()
         }
     }
