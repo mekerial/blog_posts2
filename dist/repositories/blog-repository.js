@@ -35,12 +35,12 @@ class BlogRepository {
             const newBlog = yield db_1.blogCollection.insertOne(blog);
             newBlog.insertedId;
             return {
+                id: newBlog.insertedId.toString(),
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
                 createdAt: blog.createdAt,
-                isMembership: blog.isMembership,
-                id: newBlog.insertedId.toString()
+                isMembership: blog.isMembership
             };
         });
     }

@@ -28,6 +28,10 @@ exports.postRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, fu
         return;
     }
     const post = yield post_repository_1.PostRepository.getPostById(id);
+    if (!post) {
+        res.sendStatus(404);
+        return;
+    }
     res.status(200).send(post);
 }));
 exports.postRoute.post('/', auth_middleware_1.authMiddleware, (0, post_validator_1.postValidation)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {

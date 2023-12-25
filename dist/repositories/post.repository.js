@@ -35,7 +35,15 @@ class PostRepository {
             const post = Object.assign(Object.assign({}, createdData), { blogName: blog.name, createdAt: new Date().toISOString() });
             const newPost = yield db_1.postCollection.insertOne(post);
             newPost.insertedId;
-            return Object.assign(Object.assign({}, Object.assign({}, post)), { id: newPost.insertedId.toString() });
+            return {
+                id: newPost.insertedId.toString(),
+                title: post.title,
+                shortDescription: post.shortDescription,
+                content: post.content,
+                blogId: post.blogId,
+                blogName: post.blogName,
+                createdAt: post.createdAt
+            };
         });
     }
     static updatePost(id, updatedData) {

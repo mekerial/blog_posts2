@@ -18,13 +18,17 @@ postRoute.get('/', async (req: Request, res: Response) => {
 postRoute.get('/:id', async (req: RequestWithParams<Params>, res: Response) => {
     const id = req.params.id
 
-
     if (!ObjectId.isValid(id)) {
         res.sendStatus(404)
         return;
     }
 
     const post = await PostRepository.getPostById(id)
+
+    if (!post) {
+        res.sendStatus(404)
+        return;
+    }
 
     res.status(200).send(post)
 })
