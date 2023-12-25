@@ -33,8 +33,13 @@ export class PostRepository {
         newPost.insertedId
 
         return {
-            ...{...post},
-            id: newPost.insertedId.toString()
+            id: newPost.insertedId.toString(),
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            blogId: post.blogId,
+            blogName: post.blogName,
+            createdAt: post.createdAt
         }
     }
     static async updatePost(id: string, updatedData: UpdatePostModel): Promise<boolean> {
