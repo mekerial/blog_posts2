@@ -33,17 +33,8 @@ class PostRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const blog = yield db_1.blogCollection.findOne({ _id: new mongodb_1.ObjectId(createdData.blogId) });
             const post = Object.assign(Object.assign({}, createdData), { blogName: blog.name, createdAt: new Date().toISOString() });
-            const newPost = yield db_1.postCollection.insertOne(post);
-            newPost.insertedId;
-            return {
-                id: newPost.insertedId.toString(),
-                title: post.title,
-                shortDescription: post.shortDescription,
-                content: post.content,
-                blogId: post.blogId,
-                blogName: post.blogName,
-                createdAt: post.createdAt
-            };
+            const newPost = yield db_1.postCollection.insertOne(Object.assign({}, post));
+            return (0, mapper_1.postMapper)(Object.assign(Object.assign({}, post), { _id: newPost.insertedId }));
         });
     }
     static updatePost(id, updatedData) {

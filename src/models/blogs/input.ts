@@ -9,3 +9,11 @@ export type UpdateBlogModel = {
     description: string,
     websiteUrl: string
 }
+
+export type QueryBlogInputModel = {
+    searchNameTerm?: string,
+    sortBy?: string,
+    sortDirection?: string,
+    pageNumber?: number,
+    pageSize?: number
+}

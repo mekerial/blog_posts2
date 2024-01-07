@@ -2,13 +2,34 @@ import {blogCollection, db, postCollection} from "../db/db";
 import {postMapper} from "../models/posts/mappers/mapper";
 import {ObjectId} from "mongodb";
 import {OutputPostModel} from "../models/posts/output";
-import {CreatePostModel, UpdatePostModel} from "../models/posts/input";
+import {CreatePostModel, QueryPostInputModel, UpdatePostModel} from "../models/posts/input";
 
 
 export class PostRepository {
-    static async getAllPosts() {
-        const posts = await postCollection.find({}).toArray()
-        return posts.map(postMapper)
+    static async getAllPosts(sortData: QueryPostInputModel) {
+        const pageNumber = sortData.pageNumber ?? 1
+        const pageSize = sortData.pageSize ?? 10
+        const sortBy = sortData.sortBy ?? 'createdAt'
+        const sortDirection = sortData.sortDirection ?? 'desc'
+
+        const posts = await postCollection
+            .find({})
+            .sort({[sortBy]: sortDirection === 'desc' ? -1 : 1 })
+            .skip((+pageNumber - 1) / +pageSize)
+            .limit(+pageSize)
+            .toArray()
+
+        const totalCount = await blogCollection.countDocuments({})
+
+        const pagesCount = Math.ceil(totalCount / +pageSize)
+
+        return {
+            pagesCount,
+            page: pageNumber,
+            pageSize,
+            totalCount,
+            items: posts.map(postMapper)
+        }
     }
 
     static async getPostById(id: string) {
@@ -28,19 +49,9 @@ export class PostRepository {
             createdAt: new Date().toISOString()
         }
 
-        const newPost = await postCollection.insertOne(post)
+        const newPost = await postCollection.insertOne({...post})
 
-        newPost.insertedId
-
-        return {
-            id: newPost.insertedId.toString(),
-            title: post.title,
-            shortDescription: post.shortDescription,
-            content: post.content,
-            blogId: post.blogId,
-            blogName: post.blogName,
-            createdAt: post.createdAt
-        }
+        return postMapper({...post, _id: newPost.insertedId})
     }
     static async updatePost(id: string, updatedData: UpdatePostModel): Promise<boolean> {
         const post = await postCollection.updateOne({_id: new ObjectId(id)}, {

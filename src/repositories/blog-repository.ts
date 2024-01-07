@@ -2,13 +2,44 @@ import {blogCollection, db} from "../db/db";
 import {OutputBlogModel} from "../models/blogs/output";
 import {blogMapper} from "../models/blogs/mappers/mapper";
 import {ObjectId} from "mongodb";
-import {CreateBlogModel, UpdateBlogModel} from "../models/blogs/input";
+import {CreateBlogModel, QueryBlogInputModel, UpdateBlogModel} from "../models/blogs/input";
 
 
 export class BlogRepository {
-    static async getAllBlogs(): Promise<OutputBlogModel[]> {
-        const blogs = await blogCollection.find({}).toArray()
-        return blogs.map(blogMapper)
+    static async getAllBlogs(sortData: QueryBlogInputModel) {
+        const searchNameTerm = sortData.searchNameTerm ?? null
+        const sortBy = sortData.sortBy ?? 'createdAt'
+        const sortDirection = sortData.sortDirection ?? 'desc'
+        const pageNumber = sortData.pageNumber ?? 1
+        const pageSize = sortData.pageSize ?? 10
+
+        let filter = {}
+
+        if (searchNameTerm) {
+            filter = {
+                name: {
+                    $regex: searchNameTerm, $options: 'i'
+                }
+            }
+        }
+
+        const blogs = await blogCollection
+            .find(filter)
+            .sort({ [sortBy]: sortDirection === 'desc' ? -1 : 1 })
+            .skip((pageNumber - 1) * pageSize)
+            .limit(+pageSize)
+            .toArray()
+
+        const totalCount = await blogCollection.countDocuments(filter)
+
+        const pagesCount = Math.ceil(totalCount / +pageSize)
+
+        return {pagesCount,
+            page: pageNumber,
+            pageSize,
+            totalCount,
+            items: blogs.map(blogMapper)
+        }
     }
 
     static async getBlogById(id: string): Promise<OutputBlogModel | null> {
@@ -25,18 +56,9 @@ export class BlogRepository {
             createdAt: new Date().toISOString(),
             isMembership: false
         }
-        const newBlog = await blogCollection.insertOne(blog)
+        const newBlog = await blogCollection.insertOne({...blog})
 
-        newBlog.insertedId
-
-        return {
-            id: newBlog.insertedId.toString(),
-            name: blog.name,
-            description: blog.description,
-            websiteUrl: blog.websiteUrl,
-            createdAt: blog.createdAt,
-            isMembership: blog.isMembership
-        }
+        return blogMapper({...blog, _id: newBlog.insertedId})
     }
 
     static async updateBlog(id: string, updatedData: UpdateBlogModel): Promise<boolean> {

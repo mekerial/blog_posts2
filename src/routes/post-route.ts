@@ -1,9 +1,9 @@
 import {Router, Request, Response} from "express";
 import {PostRepository} from "../repositories/post.repository";
-import {Params, RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../common";
+import {Params, RequestWithBody, RequestWithBodyAndParams, RequestWithParams, RequestWithQuery} from "../common";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {postValidation} from "../validators/post-validator";
-import {CreatePostModel} from "../models/posts/input";
+import {CreatePostModel, QueryPostInputModel} from "../models/posts/input";
 import {BlogRepository} from "../repositories/blog-repository";
 import {OutputPostModel} from "../models/posts/output";
 import {ObjectId} from "mongodb";
@@ -11,8 +11,16 @@ import {ObjectId} from "mongodb";
 
 export const postRoute = Router({})
 
-postRoute.get('/', async (req: Request, res: Response) => {
-    const posts = await PostRepository.getAllPosts()
+postRoute.get('/', async (req: RequestWithQuery<QueryPostInputModel>, res: Response) => {
+    const sortData = {
+        pageSize: req.query.pageSize,
+        pageNumber:  req.query.pageNumber,
+        sortBy: req.query.sortBy,
+        sortDirection:  req.query.sortDirection,
+    }
+
+
+    const posts = await PostRepository.getAllPosts(sortData)
     res.status(200).send(posts)
 })
 postRoute.get('/:id', async (req: RequestWithParams<Params>, res: Response) => {

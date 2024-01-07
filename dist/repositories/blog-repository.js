@@ -32,16 +32,8 @@ class BlogRepository {
     static createBlog(createdData) {
         return __awaiter(this, void 0, void 0, function* () {
             const blog = Object.assign(Object.assign({}, createdData), { createdAt: new Date().toISOString(), isMembership: false });
-            const newBlog = yield db_1.blogCollection.insertOne(blog);
-            newBlog.insertedId;
-            return {
-                id: newBlog.insertedId.toString(),
-                name: blog.name,
-                description: blog.description,
-                websiteUrl: blog.websiteUrl,
-                createdAt: blog.createdAt,
-                isMembership: blog.isMembership
-            };
+            const newBlog = yield db_1.blogCollection.insertOne(Object.assign({}, blog));
+            return (0, mapper_1.blogMapper)(Object.assign(Object.assign({}, blog), { _id: newBlog.insertedId }));
         });
     }
     static updateBlog(id, updatedData) {

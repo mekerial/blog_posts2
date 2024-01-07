@@ -1,17 +1,25 @@
 import {Router, Request, Response} from "express"
 import {BlogRepository} from "../repositories/blog-repository";
-import {Params, RequestWithBody, RequestWithBodyAndParams, RequestWithParams} from "../common";
+import {Params, RequestWithBody, RequestWithBodyAndParams, RequestWithParams, RequestWithQuery} from "../common";
 import {authMiddleware} from "../middlewares/auth/auth-middleware";
 import {blogValidation} from "../validators/blog-validator";
-import {CreateBlogModel} from "../models/blogs/input";
+import {CreateBlogModel, QueryBlogInputModel} from "../models/blogs/input";
 import {ObjectId} from "mongodb";
 import {OutputBlogModel} from "../models/blogs/output";
 
 
 export const blogRoute = Router({})
 
-blogRoute.get('/', async (req: Request, res: Response) => {
-    const blogs = await BlogRepository.getAllBlogs()
+blogRoute.get('/', async (req: RequestWithQuery<QueryBlogInputModel>, res: Response) => {
+    const sortData = {
+        searchNameTerm: req.query.searchNameTerm,
+        sortBy: req.query.sortBy,
+        sortDirection:  req.query.sortDirection,
+        pageNumber:  req.query.pageNumber,
+        pageSize: req.query.pageSize
+    }
+    const blogs = await BlogRepository.getAllBlogs(sortData)
+
     res.send(blogs)
 })
 blogRoute.get('/:id', async (req: RequestWithParams<Params>, res: Response) => {
