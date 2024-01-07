@@ -17,7 +17,14 @@ const blog_validator_1 = require("../validators/blog-validator");
 const mongodb_1 = require("mongodb");
 exports.blogRoute = (0, express_1.Router)({});
 exports.blogRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const blogs = yield blog_repository_1.BlogRepository.getAllBlogs();
+    const sortData = {
+        searchNameTerm: req.query.searchNameTerm,
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection,
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize
+    };
+    const blogs = yield blog_repository_1.BlogRepository.getAllBlogs(sortData);
     res.send(blogs);
 }));
 exports.blogRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

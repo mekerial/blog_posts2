@@ -18,7 +18,13 @@ const blog_repository_1 = require("../repositories/blog-repository");
 const mongodb_1 = require("mongodb");
 exports.postRoute = (0, express_1.Router)({});
 exports.postRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const posts = yield post_repository_1.PostRepository.getAllPosts();
+    const sortData = {
+        pageSize: req.query.pageSize,
+        pageNumber: req.query.pageNumber,
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection,
+    };
+    const posts = yield post_repository_1.PostRepository.getAllPosts(sortData);
     res.status(200).send(posts);
 }));
 exports.postRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
