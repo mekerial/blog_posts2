@@ -4,6 +4,12 @@ export type CreateBlogModel = {
     websiteUrl: string
 }
 
+export type CreatePostBlogModel = {
+    title: string,
+    shortDescription: string,
+    content: string
+}
+
 export type UpdateBlogModel = {
     name: string,
     description: string,
@@ -12,6 +18,13 @@ export type UpdateBlogModel = {
 
 export type QueryBlogInputModel = {
     searchNameTerm?: string,
+    sortBy?: string,
+    sortDirection?: string,
+    pageNumber?: number,
+    pageSize?: number
+}
+
+export type QueryPostByBlogIdInputModel = {
     sortBy?: string,
     sortDirection?: string,
     pageNumber?: number,

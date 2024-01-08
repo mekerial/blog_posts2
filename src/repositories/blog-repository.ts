@@ -1,8 +1,15 @@
-import {blogCollection, db} from "../db/db";
+import {blogCollection, db, postCollection} from "../db/db";
 import {OutputBlogModel} from "../models/blogs/output";
 import {blogMapper} from "../models/blogs/mappers/mapper";
 import {ObjectId} from "mongodb";
-import {CreateBlogModel, QueryBlogInputModel, UpdateBlogModel} from "../models/blogs/input";
+import {
+    CreateBlogModel,
+    CreatePostBlogModel,
+    QueryBlogInputModel,
+    QueryPostByBlogIdInputModel,
+    UpdateBlogModel
+} from "../models/blogs/input";
+import {postMapper} from "../models/posts/mappers/mapper";
 
 
 export class BlogRepository {
@@ -41,6 +48,50 @@ export class BlogRepository {
             items: blogs.map(blogMapper)
         }
     }
+
+    static async getPostsByBlogId(blogId: string, sortData: QueryPostByBlogIdInputModel) {
+        const sortBy = sortData.sortBy ?? 'createdAt'
+        const sortDirection = sortData.sortDirection ?? 'desc'
+        const pageNumber = sortData.pageNumber ?? 1
+        const pageSize = sortData.pageSize ?? 10
+
+        const posts = await postCollection
+            .find({blogId: blogId})
+            .sort({ [sortBy]: sortDirection === 'desc' ? -1 : 1 })
+            .skip((pageNumber - 1) * pageSize)
+            .limit(+pageSize)
+            .toArray()
+
+        const totalCount = await postCollection
+            .countDocuments({blogId: blogId})
+
+        const pagesCount = Math.ceil(totalCount / +pageSize)
+
+        return {pagesCount,
+            page: pageNumber,
+            pageSize,
+            totalCount,
+            items: posts.map(postMapper)
+        }
+    }
+
+    static async createPostToBlog(blogId: string, postData: CreatePostBlogModel) {
+        const blog = await this.getBlogById(blogId)
+
+        const post = {
+            title: postData.title,
+            shortDescription: postData.shortDescription,
+            content: postData.content,
+            blogId: blogId,
+            blogName: blog!.name,
+            createdAt: (new Date).toISOString()
+        }
+
+        const res = await postCollection.insertOne(post)
+
+        return res.insertedId
+    }
+
 
     static async getBlogById(id: string): Promise<OutputBlogModel | null> {
         const blog = await blogCollection.findOne({_id: new ObjectId(id)})
