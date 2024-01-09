@@ -70,7 +70,7 @@ blogRoute.get('/:id/posts', async (req: RequestWithParamsAndQuery<Params, QueryP
         return;
     }
 
-    res.status(200).send(posts)
+    res.send(posts)
 })
 
 
