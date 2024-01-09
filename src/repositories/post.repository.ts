@@ -14,7 +14,7 @@ export class PostRepository {
 
         const posts = await postCollection
             .find({})
-            .sort({[sortBy]: sortDirection === 'desc' ? 1 : -1 })
+            .sort({[sortBy]: sortDirection === 'desc' ? -1 : 1 })
             .skip((+pageNumber - 1) / +pageSize)
             .limit(+pageSize)
             .toArray()
