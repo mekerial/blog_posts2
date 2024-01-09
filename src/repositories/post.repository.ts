@@ -8,7 +8,7 @@ import {CreatePostModel, QueryPostInputModel, UpdatePostModel} from "../models/p
 export class PostRepository {
     static async getAllPosts(sortData: QueryPostInputModel) {
         const pageNumber = sortData.pageNumber ?? 1
-        const pageSize = sortData.pageSize ?? 10
+        const pageSize = +(sortData.pageSize ?? 10)
         const sortBy = sortData.sortBy ?? 'createdAt'
         const sortDirection = sortData.sortDirection ?? 'desc'
 
@@ -16,7 +16,7 @@ export class PostRepository {
             .find({})
             .sort({[sortBy]: sortDirection === 'desc' ? -1 : 1 })
             .skip((+pageNumber - 1) / pageSize)
-            .limit(pageSize)
+            .limit(+pageSize)
             .toArray()
 
         const totalCount = await blogCollection.countDocuments({})
@@ -26,7 +26,7 @@ export class PostRepository {
         return {
             pagesCount,
             page: +pageNumber,
-            pageSize: +pageSize,
+            pageSize: pageSize,
             totalCount,
             items: posts.map(postMapper)
         }
