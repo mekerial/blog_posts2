@@ -23,12 +23,12 @@ class PostRepository {
             const sortDirection = (_d = sortData.sortDirection) !== null && _d !== void 0 ? _d : 'desc';
             const posts = yield db_1.postCollection
                 .find({})
-                .sort({ [sortBy]: sortDirection === 'desc' ? 1 : -1 })
-                .skip((+pageNumber - 1) / +pageSize)
-                .limit(+pageSize)
+                .sort({ [sortBy]: sortDirection === 'desc' ? -1 : 1 })
+                .skip((+pageNumber - 1) / pageSize)
+                .limit(pageSize)
                 .toArray();
             const totalCount = yield db_1.blogCollection.countDocuments({});
-            const pagesCount = Math.ceil(totalCount / +pageSize);
+            const pagesCount = Math.ceil(totalCount / pageSize);
             return {
                 pagesCount,
                 page: +pageNumber,

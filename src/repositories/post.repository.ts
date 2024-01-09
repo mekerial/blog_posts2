@@ -15,13 +15,13 @@ export class PostRepository {
         const posts = await postCollection
             .find({})
             .sort({[sortBy]: sortDirection === 'desc' ? -1 : 1 })
-            .skip((+pageNumber - 1) / +pageSize)
-            .limit(+pageSize)
+            .skip((+pageNumber - 1) / pageSize)
+            .limit(pageSize)
             .toArray()
 
         const totalCount = await blogCollection.countDocuments({})
 
-        const pagesCount = Math.ceil(totalCount / +pageSize)
+        const pagesCount = Math.ceil(totalCount / pageSize)
 
         return {
             pagesCount,
