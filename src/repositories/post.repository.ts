@@ -19,9 +19,9 @@ export class PostRepository {
             .limit(+pageSize)
             .toArray()
 
-        const totalCount = await blogCollection.countDocuments({})
+        const totalCount = await postCollection.countDocuments({})
 
-        const pagesCount = Math.ceil(totalCount / pageSize)
+        const pagesCount = Math.ceil(totalCount * pageSize)
 
         return {
             pagesCount,
