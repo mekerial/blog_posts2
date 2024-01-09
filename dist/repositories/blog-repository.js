@@ -13,6 +13,7 @@ exports.BlogRepository = void 0;
 const db_1 = require("../db/db");
 const mapper_1 = require("../models/blogs/mappers/mapper");
 const mongodb_1 = require("mongodb");
+const mapper_2 = require("../models/posts/mappers/mapper");
 class BlogRepository {
     static getAllBlogs(sortData) {
         var _a, _b, _c, _d, _e;
@@ -44,6 +45,45 @@ class BlogRepository {
                 totalCount,
                 items: blogs.map(mapper_1.blogMapper)
             };
+        });
+    }
+    static getPostsByBlogId(blogId, sortData) {
+        var _a, _b, _c, _d;
+        return __awaiter(this, void 0, void 0, function* () {
+            const sortBy = (_a = sortData.sortBy) !== null && _a !== void 0 ? _a : 'createdAt';
+            const sortDirection = (_b = sortData.sortDirection) !== null && _b !== void 0 ? _b : 'desc';
+            const pageNumber = (_c = sortData.pageNumber) !== null && _c !== void 0 ? _c : 1;
+            const pageSize = (_d = sortData.pageSize) !== null && _d !== void 0 ? _d : 10;
+            const posts = yield db_1.postCollection
+                .find({ blogId: blogId })
+                .sort({ [sortBy]: sortDirection === 'desc' ? -1 : 1 })
+                .skip((pageNumber - 1) * pageSize)
+                .limit(+pageSize)
+                .toArray();
+            const totalCount = yield db_1.postCollection
+                .countDocuments({ blogId: blogId });
+            const pagesCount = Math.ceil(totalCount / +pageSize);
+            return { pagesCount,
+                page: pageNumber,
+                pageSize,
+                totalCount,
+                items: posts.map(mapper_2.postMapper)
+            };
+        });
+    }
+    static createPostToBlog(blogId, postData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const blog = yield this.getBlogById(blogId);
+            const post = {
+                title: postData.title,
+                shortDescription: postData.shortDescription,
+                content: postData.content,
+                blogId: blogId,
+                blogName: blog.name,
+                createdAt: (new Date).toISOString()
+            };
+            const res = yield db_1.postCollection.insertOne(post);
+            return res.insertedId;
         });
     }
     static getBlogById(id) {

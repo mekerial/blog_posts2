@@ -19,6 +19,11 @@ import {
 import {ObjectId} from "mongodb";
 import {OutputBlogModel} from "../models/blogs/output";
 import {PostRepository} from "../repositories/post.repository";
+import {blogPostValidation} from "../validators/blog-post-validator";
+import {postValidation} from "../validators/post-validator";
+import {CreatePostModel} from "../models/posts/input";
+import {OutputPostModel} from "../models/posts/output";
+import {postRoute} from "./post-route";
 
 
 export const blogRoute = Router({})
@@ -53,7 +58,7 @@ blogRoute.get('/:id', async (req: RequestWithParams<Params>, res: Response) => {
     res.send(blog)
 })
 
-blogRoute.get('/:id/posts', async (req: RequestWithParamsAndQuery<Params, QueryPostByBlogIdInputModel>, res: Response) => {
+blogRoute.get('/:id/posts',authMiddleware, async (req: RequestWithParamsAndQuery<Params, QueryPostByBlogIdInputModel>, res: Response) => {
     const id = req.params.id
 
     if (!ObjectId.isValid(id)) {
@@ -70,10 +75,40 @@ blogRoute.get('/:id/posts', async (req: RequestWithParamsAndQuery<Params, QueryP
 
     const posts = await BlogRepository.getPostsByBlogId(id, sortData)
 
-
-
     res.send(posts)
 })
+
+blogRoute.post('/:id/posts', authMiddleware, async (req: RequestWithBodyAndParams<Params, CreatePostModel>, res: Response<OutputPostModel>) => {
+    const id = req.params.id
+
+    if (!ObjectId.isValid(id)) {
+        res.sendStatus(404)
+        return;
+    }
+
+    const title = req.body.title
+    const shortDescription = req.body.shortDescription
+    const content = req.body.content
+
+
+    const blog = await BlogRepository.getBlogById(id)
+
+    if (!blog) {
+        res.sendStatus(404)
+        return
+    }
+
+    const newPost = {
+        title,
+        shortDescription,
+        content,
+    }
+
+    const createdPost = await PostRepository.createPost({...newPost, blogId: id})
+
+    res.status(201).send(createdPost)
+})
+
 
 
 blogRoute.post('/', authMiddleware, blogValidation(), async (req: RequestWithBody<CreateBlogModel>, res: Response) => {
