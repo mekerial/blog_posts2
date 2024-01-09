@@ -68,8 +68,8 @@ export class BlogRepository {
         const pagesCount = Math.ceil(totalCount / +pageSize)
 
         return {pagesCount,
-            page: pageNumber,
-            pageSize,
+            page: +pageNumber,
+            pageSize: +pageSize,
             totalCount,
             items: posts.map(postMapper)
         }

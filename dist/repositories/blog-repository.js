@@ -64,8 +64,8 @@ class BlogRepository {
                 .countDocuments({ blogId: blogId });
             const pagesCount = Math.ceil(totalCount / +pageSize);
             return { pagesCount,
-                page: pageNumber,
-                pageSize,
+                page: +pageNumber,
+                pageSize: +pageSize,
                 totalCount,
                 items: posts.map(mapper_2.postMapper)
             };
