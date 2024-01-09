@@ -75,6 +75,7 @@ export class BlogRepository {
         }
     }
 
+
     static async createPostToBlog(blogId: string, postData: CreatePostBlogModel) {
         const blog = await this.getBlogById(blogId)
 
