@@ -40,8 +40,8 @@ class BlogRepository {
             const totalCount = yield db_1.blogCollection.countDocuments(filter);
             const pagesCount = Math.ceil(totalCount / +pageSize);
             return { pagesCount,
-                page: pageNumber,
-                pageSize,
+                page: +pageNumber,
+                pageSize: +pageSize,
                 totalCount,
                 items: blogs.map(mapper_1.blogMapper)
             };
