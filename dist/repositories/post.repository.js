@@ -24,11 +24,11 @@ class PostRepository {
             const posts = yield db_1.postCollection
                 .find({})
                 .sort({ [sortBy]: sortDirection === 'desc' ? -1 : 1 })
-                .skip((+pageNumber - 1) / pageSize)
+                .skip((+pageNumber - 1) * pageSize)
                 .limit(+pageSize)
                 .toArray();
             const totalCount = yield db_1.postCollection.countDocuments({});
-            const pagesCount = Math.ceil(totalCount * pageSize);
+            const pagesCount = Math.ceil(totalCount / pageSize);
             return {
                 pagesCount,
                 page: +pageNumber,

@@ -21,7 +21,7 @@ export class PostRepository {
 
         const totalCount = await postCollection.countDocuments({})
 
-        const pagesCount = Math.ceil(totalCount * pageSize)
+        const pagesCount = Math.ceil(totalCount / pageSize)
 
         return {
             pagesCount,
