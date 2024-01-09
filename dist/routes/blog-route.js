@@ -42,9 +42,14 @@ exports.blogRoute.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
     res.send(blog);
 }));
-exports.blogRoute.get('/:id/posts', auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.blogRoute.get('/:id/posts', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     if (!mongodb_1.ObjectId.isValid(id)) {
+        res.sendStatus(404);
+        return;
+    }
+    const blog = yield blog_repository_1.BlogRepository.getBlogById(id);
+    if (!blog) {
         res.sendStatus(404);
         return;
     }
