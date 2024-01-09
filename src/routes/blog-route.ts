@@ -65,6 +65,11 @@ blogRoute.get('/:id/posts',authMiddleware, async (req: RequestWithParamsAndQuery
         res.sendStatus(404)
         return;
     }
+    const blog = await BlogRepository.getBlogById(id)
+    if (!blog) {
+        res.sendStatus(404)
+        return
+    }
 
     const sortData = {
         sortBy: req.query.sortBy,
