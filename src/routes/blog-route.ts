@@ -78,7 +78,7 @@ blogRoute.get('/:id/posts',authMiddleware, async (req: RequestWithParamsAndQuery
     res.send(posts)
 })
 
-blogRoute.post('/:id/posts', authMiddleware, async (req: RequestWithBodyAndParams<Params, CreatePostModel>, res: Response<OutputPostModel>) => {
+blogRoute.post('/:id/posts', authMiddleware, blogPostValidation(), async (req: RequestWithBodyAndParams<Params, CreatePostModel>, res: Response<OutputPostModel>) => {
     const id = req.params.id
 
     if (!ObjectId.isValid(id)) {

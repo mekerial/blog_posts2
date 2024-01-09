@@ -16,6 +16,7 @@ const auth_middleware_1 = require("../middlewares/auth/auth-middleware");
 const blog_validator_1 = require("../validators/blog-validator");
 const mongodb_1 = require("mongodb");
 const post_repository_1 = require("../repositories/post.repository");
+const blog_post_validator_1 = require("../validators/blog-post-validator");
 exports.blogRoute = (0, express_1.Router)({});
 exports.blogRoute.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const sortData = {
@@ -56,7 +57,7 @@ exports.blogRoute.get('/:id/posts', auth_middleware_1.authMiddleware, (req, res)
     const posts = yield blog_repository_1.BlogRepository.getPostsByBlogId(id, sortData);
     res.send(posts);
 }));
-exports.blogRoute.post('/:id/posts', auth_middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.blogRoute.post('/:id/posts', auth_middleware_1.authMiddleware, (0, blog_post_validator_1.blogPostValidation)(), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
     if (!mongodb_1.ObjectId.isValid(id)) {
         res.sendStatus(404);
