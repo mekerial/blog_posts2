@@ -29,6 +29,7 @@ export class UserRepository {
             .sort({ [sortBy]: sortDirection === 'desc' ? -1 : 1 })
             .skip((pageNumber - 1) * pageSize)
             .limit(+pageSize)
+            .map(userMapper)
             .toArray()
 
         const totalCount = await userCollection.countDocuments(filter)
