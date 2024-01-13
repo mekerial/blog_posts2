@@ -22,3 +22,10 @@ export type PostDBType = {
     blogName: string,
     createdAt: string
 }
+
+export type UserDbType = {
+    login: string,
+    email: string,
+    password: string,
+    createdAt: string
+}

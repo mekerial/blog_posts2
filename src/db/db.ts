@@ -1,6 +1,8 @@
-import {BlogDBType, DBType, PostDBType} from "../models/db/db";
+import {BlogDBType, DBType, PostDBType, UserDbType} from "../models/db/db-types";
 import {MongoClient} from "mongodb";
 import dotenv from "dotenv";
+
+
 dotenv.config()
 
 const port = 3002;
@@ -20,6 +22,7 @@ export const database = client.db('blogs-posts')
 
 export const blogCollection = database.collection<BlogDBType>('blogs')
 export const postCollection = database.collection<PostDBType>('posts')
+export const userCollection = database.collection<UserDbType>('users')
 
 
 export const runDb = async () => {

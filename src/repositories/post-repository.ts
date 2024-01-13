@@ -1,4 +1,4 @@
-import {blogCollection, db, postCollection} from "../db/db";
+import {blogCollection, postCollection} from "../db/db";
 import {postMapper} from "../models/posts/mappers/mapper";
 import {ObjectId} from "mongodb";
 import {OutputPostModel} from "../models/posts/output";

@@ -1,4 +1,4 @@
-import {blogCollection, db, postCollection} from "../db/db";
+import {blogCollection, postCollection} from "../db/db";
 import {OutputBlogModel} from "../models/blogs/output";
 import {blogMapper} from "../models/blogs/mappers/mapper";
 import {ObjectId} from "mongodb";
@@ -48,7 +48,6 @@ export class BlogRepository {
             items: blogs.map(blogMapper)
         }
     }
-
     static async getPostsByBlogId(blogId: string, sortData: QueryPostByBlogIdInputModel) {
         const sortBy = sortData.sortBy ?? 'createdAt'
         const sortDirection = sortData.sortDirection ?? 'desc'
@@ -74,8 +73,6 @@ export class BlogRepository {
             items: posts.map(postMapper)
         }
     }
-
-
     static async createPostToBlog(blogId: string, postData: CreatePostBlogModel) {
         const blog = await this.getBlogById(blogId)
 
@@ -92,8 +89,6 @@ export class BlogRepository {
 
         return res.insertedId
     }
-
-
     static async getBlogById(id: string): Promise<OutputBlogModel | null> {
         const blog = await blogCollection.findOne({_id: new ObjectId(id)})
         if (!blog) {
@@ -101,8 +96,8 @@ export class BlogRepository {
         }
         return blogMapper(blog)
     }
-
     static async createBlog(createdData: CreateBlogModel): Promise<OutputBlogModel> {
+
         const blog = {
             ...createdData,
             createdAt: new Date().toISOString(),
@@ -112,7 +107,6 @@ export class BlogRepository {
 
         return blogMapper({...blog, _id: newBlog.insertedId})
     }
-
     static async updateBlog(id: string, updatedData: UpdateBlogModel): Promise<boolean> {
         const blog = await blogCollection.updateOne({_id: new ObjectId(id)}, {
             $set: {

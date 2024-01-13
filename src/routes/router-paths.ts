@@ -1,5 +1,7 @@
 export const RouterPaths = {
     blogs: '/blogs',
     posts: '/posts',
-    testing: '/testing/all-data'
+    users: '/users',
+    testing: '/testing/all-data',
+    auth: '/auth/login'
 }

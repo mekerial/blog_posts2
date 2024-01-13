@@ -1,11 +1,10 @@
-import {Router, Request, Response} from "express";
-import {PostRepository} from "../repositories/post.repository";
-import {Params, RequestWithBody, RequestWithBodyAndParams, RequestWithParams, RequestWithQuery} from "../common";
-import {authMiddleware} from "../middlewares/auth/auth-middleware";
-import {postValidation} from "../validators/post-validator";
-import {CreatePostModel, QueryPostInputModel} from "../models/posts/input";
-import {BlogRepository} from "../repositories/blog-repository";
-import {OutputPostModel} from "../models/posts/output";
+import {Router, Response} from "express";
+import {PostRepository} from "../../repositories/post-repository";
+import {Params, RequestWithBody, RequestWithBodyAndParams, RequestWithParams, RequestWithQuery} from "../../common";
+import {authMiddleware} from "../../middlewares/auth/auth-middleware";
+import {postValidation} from "../../validators/post-validator";
+import {CreatePostModel, QueryPostInputModel} from "../../models/posts/input";
+import {OutputPostModel} from "../../models/posts/output";
 import {ObjectId} from "mongodb";
 
 
@@ -46,9 +45,6 @@ postRoute.post('/', authMiddleware, postValidation(), async (req: RequestWithBod
     const content = req.body.content
     const blogId = req.body.blogId
 
-
-    const blog = await BlogRepository.getBlogById(blogId)
-
     const newPost: CreatePostModel = {
         title,
         shortDescription,
@@ -76,7 +72,6 @@ postRoute.put('/:id', authMiddleware, postValidation(), async (req: RequestWithB
     const blogId = req.body.blogId
 
     const post = await PostRepository.getPostById(id)
-    const blog = await BlogRepository.getBlogById(blogId)
 
     if (!post) {
         res.sendStatus(404)

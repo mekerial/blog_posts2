@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postRoute = void 0;
 const express_1 = require("express");
-const post_repository_1 = require("../repositories/post.repository");
+const post_repository_1 = require("../repositories/post-repository");
 const auth_middleware_1 = require("../middlewares/auth/auth-middleware");
 const post_validator_1 = require("../validators/post-validator");
 const blog_repository_1 = require("../repositories/blog-repository");
