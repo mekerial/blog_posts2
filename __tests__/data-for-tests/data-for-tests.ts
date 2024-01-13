@@ -1,5 +1,3 @@
-import {OutputBlogModel} from "../../src/models/blogs/output";
-
 export const dataTestBlogCreate01= {
     name: 'create name',
     description: 'create description',
