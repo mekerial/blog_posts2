@@ -26,6 +26,7 @@ export type PostDBType = {
 export type UserDbType = {
     login: string,
     email: string,
-    password: string,
+    passwordHash: string,
+    passwordSalt: string,
     createdAt: string
 }

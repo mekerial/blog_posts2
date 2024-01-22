@@ -1,7 +1,7 @@
 import request from 'supertest'
 import {app} from "../../src";
 import {RouterPaths} from "../../src/routes/router-paths";
-import {dataTestBlogCreate01, dataTestBlogCreate02, incorrectInputData} from "../data-for-tests/data-for-tests";
+import {dataTestBlogCreate01, dataTestBlogCreate02, incorrectInputData} from "../data-for-tests/blog-data-for-tests";
 import {blogsTestManager} from "../utils/blogsTestManager";
 import {CreateBlogModel} from "../../src/models/blogs/input";
 
@@ -23,6 +23,7 @@ describe(RouterPaths.blogs, () => {
         await getRequest()
             .get(RouterPaths.blogs)
             .expect(200, [])
+
     })
     it('shouldreturn 404 for not existing blogs', async () => {
         await getRequest()

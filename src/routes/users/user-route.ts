@@ -11,6 +11,7 @@ import {UserRepository} from "../../repositories/user-repository";
 import {authMiddleware} from "../../middlewares/auth/auth-middleware";
 import {ObjectId} from "mongodb";
 import {userValidation} from "../../validators/user-validator";
+import {UserService} from "../../services/user-service";
 
 
 export const userRoute = Router({})
@@ -41,7 +42,7 @@ userRoute.post('/', authMiddleware, userValidation(), async (req: RequestWithBod
         email
     }
 
-    const createdUser = await UserRepository.createUser(newUser)
+    const createdUser = await UserService.createUser(newUser)
 
     res.status(201).send(createdUser)
 })

@@ -1,3 +1,12 @@
+export const BlogPaginationView = {
+    "pagesCount": 0,
+    "page": 1,
+    "pageSize": 10,
+    "totalCount": 0,
+    "items": []
+}
+
+
 export const dataTestBlogCreate01= {
     name: 'create name',
     description: 'create description',

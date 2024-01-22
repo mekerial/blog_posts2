@@ -1,8 +1,7 @@
-import {CreateUserModel, QueryUserInputModel} from "../models/users/input";
+import {CreateUserWithHash, QueryUserInputModel} from "../models/users/input";
 import {userCollection} from "../db/db";
 import {userMapper} from "../models/users/mappers/user-mapper";
 import {ObjectId} from "mongodb";
-import {LoginInputModel} from "../models/logins/input";
 
 export class UserRepository {
     static async getAllUsers(sortData: QueryUserInputModel) {
@@ -44,17 +43,12 @@ export class UserRepository {
             items: users
         }
     }
-    static async checkCredentials(auth: LoginInputModel): Promise<boolean | null> {
-        const loginOrEmail = auth.loginOrEmail
-        const password = auth.password
-        const userLoginAndPassword = await userCollection.findOne({login: loginOrEmail, password: password})
 
-        if (userLoginAndPassword) {
-            return true
-        }
-        return false
+    static async findUserByLoginOrEmail(LoginOrEmail: string) {
+        return await userCollection.findOne({ $or: [{email: LoginOrEmail}, {login: LoginOrEmail}]})
     }
-    static async createUser(createdData: CreateUserModel) {
+
+    static async createUser(createdData: CreateUserWithHash) {
 
         const user = {
             ...createdData,
