@@ -20,6 +20,11 @@ describe(RouterPaths.posts, () => {
         const createResponse = await getRequest()
             .get(RouterPaths.posts)
             .expect(200)
-        expect(createResponse.body.items).toEqual(postPaginationView.items)
+        expect(createResponse.body).toEqual(postPaginationView)
+        console.log(createResponse.body.items)
     })
+
+    // jest.setTimeout(5 * 60 * 1000);
+
+
 })

@@ -21,11 +21,14 @@ describe(RouterPaths.users, () => {
                 "email": "love@gmail.com"
             })
             .expect(201)
+        console.log('sdfsdf 1')
 
         await getRequest()
             .get(RouterPaths.users)
             .set('authorization', 'Basic YWRtaW46cXdlcnR5')
             .expect(200)
+
+        console.log('sdfsdf 2')
     })
 
 })

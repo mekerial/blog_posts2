@@ -4,7 +4,6 @@ export const postPaginationView = {
     "pageSize": 10,
     "totalCount": 0,
     "items": [],
-
 }
 
 export const dataTestPostCreate01 = {
